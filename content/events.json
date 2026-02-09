@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "workshop-kubernetes",
+    "title": "Workshop Kubernetes",
+    "location": "Amphi 1",
+    "date": "14 Fév",
+    "description": "Atelier pratique pour découvrir Kubernetes, ses concepts clés et un premier déploiement."
+  },
+  {
+    "slug": "introduction-flutter",
+    "title": "Introduction à Flutter",
+    "location": "Labo 3",
+    "date": "20 Fév",
+    "description": "Découverte de Flutter et création d'une première application mobile multiplateforme."
+  },
+  {
+    "slug": "tech-talk-google-cloud",
+    "title": "Tech Talk: Google Cloud",
+    "location": "Online",
+    "date": "28 Fév",
+    "description": "Conférence sur les services GCP, les bonnes pratiques et les cas d'usage."
+  }
+]

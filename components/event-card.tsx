@@ -5,16 +5,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 import { MapPinIcon, CalendarIcon } from "@heroicons/react/24/outline";
 
 interface EventCardProps {
   title: string;
   location: string;
   date: string;
+  href?: string;
 }
 
-export function EventCard({ title, location, date }: EventCardProps) {
-  return (
+export function EventCard({ title, location, date, href }: EventCardProps) {
+  const content = (
     <Card className="group transition-all duration-300 hover:shadow-xl hover:shadow-[#4285F4]/10 hover:-translate-y-2 border-2 hover:border-[#4285F4]/30 bg-gradient-to-br from-card to-card/50 backdrop-blur-sm">
       <CardHeader className="pb-3">
         <CardTitle className="text-xl font-bold group-hover:text-[#4285F4] transition-colors duration-300">
@@ -33,4 +35,14 @@ export function EventCard({ title, location, date }: EventCardProps) {
       </CardContent>
     </Card>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className="block">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }
