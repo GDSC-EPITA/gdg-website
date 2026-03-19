@@ -1,9 +1,60 @@
+"use client";
+
+import { useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+type Status = "idle" | "loading" | "success" | "error";
+
 export default function ContactPage() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setStatus("loading");
+    setMessage("");
+
+    const formData = new FormData(event.currentTarget);
+    const payload = {
+      name: formData.get("name")?.toString() ?? "",
+      email: formData.get("email")?.toString() ?? "",
+      subject: formData.get("subject")?.toString() ?? "",
+      message: formData.get("message")?.toString() ?? "",
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const body = await response.json().catch(() => null);
+
+      if (!response.ok || !body?.ok) {
+        setStatus("error");
+        setMessage(
+          body?.error ??
+            "Une erreur est survenue. Merci de vérifier vos informations."
+        );
+        return;
+      }
+
+      setStatus("success");
+      setMessage(
+        body?.message ??
+          "Merci pour votre message ! Nous reviendrons vers vous rapidement."
+      );
+      event.currentTarget.reset();
+    } catch {
+      setStatus("error");
+      setMessage("Impossible de contacter le serveur. Réessayez plus tard.");
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-background to-muted/20">
       <Navbar />
@@ -23,7 +74,10 @@ export default function ContactPage() {
             Une question, une idee, une proposition de talk ? Ecrivez-nous.
           </p>
 
-          <form className="grid gap-4 text-left rounded-3xl border-2 border-border/50 bg-background/70 p-8 backdrop-blur-sm shadow-xl">
+          <form
+            className="grid gap-4 text-left rounded-3xl border-2 border-border/50 bg-background/70 p-8 backdrop-blur-sm shadow-xl"
+            onSubmit={handleSubmit}
+          >
             <Input
               placeholder="Nom"
               name="name"
@@ -52,18 +106,29 @@ export default function ContactPage() {
             <Button
               className="w-full sm:w-auto bg-gradient-to-r from-[#4285F4] via-[#DB4437] to-[#0F9D58] text-white shadow-lg hover:shadow-xl"
               type="submit"
+              disabled={status === "loading"}
             >
-              Envoyer
+              {status === "loading" ? "Envoi..." : "Envoyer"}
             </Button>
           </form>
+
+          {message ? (
+            <p
+              className={`mt-4 text-sm font-medium ${
+                status === "error" ? "text-red-500" : "text-[#0F9D58]"
+              }`}
+            >
+              {message}
+            </p>
+          ) : null}
 
           <p className="mt-6 text-sm text-muted-foreground">
             Ou contactez-nous directement:{" "}
             <a
               className="font-semibold text-[#4285F4] hover:text-[#0F9D58] transition-colors"
-              href="mailto:contact@gdgepita.fr"
+              href="mailto:gdsc.epita@gmail.com"
             >
-              contact@gdgepita.fr
+              gdsc.epita@gmail.com
             </a>
           </p>
         </div>
@@ -73,3 +138,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

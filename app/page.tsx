@@ -5,10 +5,10 @@ import { SocialSection } from "@/components/social-section";
 import { ScrollAnimation } from "@/components/scroll-animation";
 import { NewsletterSection } from "@/components/sections/newsletter-section";
 import { Button } from "@/components/ui/button";
-import { getEvents } from "@/lib/data/events";
+import { getUpcomingEvents } from "@/lib/data/events";
 
 export default function Home() {
-  const events = getEvents().slice(0, 3);
+  const events = getUpcomingEvents().slice(0, 3);
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-background to-muted/20">
@@ -196,6 +196,7 @@ export default function Home() {
                     title={event.title}
                     location={event.location}
                     date={event.date}
+                    image={event.image}
                   />
                 </ScrollAnimation>
               ))}
